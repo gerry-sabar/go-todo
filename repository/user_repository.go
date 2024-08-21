@@ -79,4 +79,5 @@ func (r *UserRepository) GetAll() ([]domain.User, error) {
 		return nil, err
 	}
 	return users, nil
+
 }
