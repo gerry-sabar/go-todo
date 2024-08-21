@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.0 (Python 3.10.12 on linux)" generated="2024-07-05T23:23:56.986634" rpa="false" schemaversion="5">
+<suite id="s1" name="01.Get Todo" source="/home/gerry/study/go-todo/test/e2e/01.get_todo.robot">
+<test id="s1-t1" name="Get Todo" line="8">
+<kw name="Create Session" owner="RequestsLibrary">
+<msg time="2024-07-05T23:23:57.045113" level="INFO">Creating Session using : alias=jsonplaceholder, url=http://localhost:8080, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<arg>jsonplaceholder</arg>
+<arg>${BASE_URL}</arg>
+<arg>verify=false</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2024-07-05T23:23:57.044881" elapsed="0.000381"/>
+</kw>
+<kw name="GET On Session" owner="RequestsLibrary">
+<msg time="2024-07-05T23:23:57.047726" level="INFO">GET Request : url=http://localhost:8080/v1/todos/1 
+ path_url=/v1/todos/1 
+ headers={'User-Agent': 'python-requests/2.25.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg time="2024-07-05T23:23:57.047809" level="INFO">GET Response : url=http://localhost:8080/v1/todos/1 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json; charset=utf-8', 'Date': 'Fri, 05 Jul 2024 16:23:57 GMT', 'Content-Length': '124'} 
+ body={"data":{"id":1,"title":"Testing","status":"Doing","created_at":"2024-05-02T15:22:57Z","updated_at":"2024-05-02T15:22:57Z"}} 
+ </msg>
+<msg time="2024-07-05T23:23:57.047925" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>jsonplaceholder</arg>
+<arg>v1/todos/1</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2024-07-05T23:23:57.045417" elapsed="0.002527"/>
+</kw>
+<kw name="Should Be Equal As Numbers" owner="BuiltIn">
+<msg time="2024-07-05T23:23:57.048567" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<status status="PASS" start="2024-07-05T23:23:57.048104" elapsed="0.000520"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2024-07-05T23:23:57.049139" level="INFO">${json} = {'data': {'id': 1, 'title': 'Testing', 'status': 'Doing', 'created_at': '2024-05-02T15:22:57Z', 'updated_at': '2024-05-02T15:22:57Z'}}</msg>
+<var>${json}</var>
+<arg>${response.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2024-07-05T23:23:57.048766" elapsed="0.000392"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>${json['data']['id']}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2024-07-05T23:23:57.049263" elapsed="0.000312"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2024-07-05T23:23:57.049956" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${json['data']['id']}</arg>
+<arg>1</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2024-07-05T23:23:57.049670" elapsed="0.000325"/>
+</kw>
+<kw name="Should Be Equal As Strings" owner="BuiltIn">
+<arg>${json['data']['title']}</arg>
+<arg>Testing</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" start="2024-07-05T23:23:57.050087" elapsed="0.000293"/>
+</kw>
+<kw name="Should Be Equal As Strings" owner="BuiltIn">
+<arg>${json['data']['status']}</arg>
+<arg>Doing</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" start="2024-07-05T23:23:57.050473" elapsed="0.000273"/>
+</kw>
+<doc>A test case to get a single todo</doc>
+<status status="PASS" start="2024-07-05T23:23:57.043726" elapsed="0.007135"/>
+</test>
+<test id="s1-t2" name="Create Todo" line="20">
+<kw name="Create Session" owner="RequestsLibrary">
+<msg time="2024-07-05T23:23:57.051582" level="INFO">Creating Session using : alias=jsonplaceholder, url=http://localhost:8080, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<arg>jsonplaceholder</arg>
+<arg>${BASE_URL}</arg>
+<arg>verify=false</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2024-07-05T23:23:57.051380" elapsed="0.000378"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2024-07-05T23:23:57.052201" level="INFO">${request_body} = {'title': 'Testing Input', 'status': 'Doing'}</msg>
+<var>${request_body}</var>
+<arg>title=Testing Input</arg>
+<arg>status=Doing</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2024-07-05T23:23:57.051946" elapsed="0.000274"/>
+</kw>
+<kw name="Create Session" owner="RequestsLibrary">
+<msg time="2024-07-05T23:23:57.052513" level="INFO">Creating Session using : alias=jsonplaceholder, url=http://localhost:8080, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<arg>jsonplaceholder</arg>
+<arg>${BASE_URL}</arg>
+<arg>verify=false</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2024-07-05T23:23:57.052335" elapsed="0.000352"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2024-07-05T23:23:57.083522" level="INFO">POST Request : url=http://localhost:8080/v1/todos 
+ path_url=/v1/todos 
+ headers={'User-Agent': 'python-requests/2.25.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '45', 'Content-Type': 'application/json'} 
+ body=b'{"title": "Testing Input", "status": "Doing"}' 
+ </msg>
+<msg time="2024-07-05T23:23:57.083791" level="INFO">POST Response : url=http://localhost:8080/v1/todos 
+ status=200, reason=OK 
+ headers={'Content-Type': 'application/json; charset=utf-8', 'Date': 'Fri, 05 Jul 2024 16:23:57 GMT', 'Content-Length': '131'} 
+ body={"data":{"id":16,"title":"Testing Input","status":"Doing","created_at":"0001-01-01T00:00:00Z","updated_at":"0001-01-01T00:00:00Z"}} 
+ </msg>
+<msg time="2024-07-05T23:23:57.084009" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>jsonplaceholder</arg>
+<arg>v1/todos</arg>
+<arg>json=${request_body}</arg>
+<arg>expected_status=200</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2024-07-05T23:23:57.052801" elapsed="0.031238"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2024-07-05T23:23:57.085872" level="INFO">${json} = {'data': {'id': 16, 'title': 'Testing Input', 'status': 'Doing', 'created_at': '0001-01-01T00:00:00Z', 'updated_at': '0001-01-01T00:00:00Z'}}</msg>
+<var>${json}</var>
+<arg>${response.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2024-07-05T23:23:57.084833" elapsed="0.001068"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>${json['data']['id']}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2024-07-05T23:23:57.086048" elapsed="0.000357"/>
+</kw>
+<doc>A test case to get a single todo</doc>
+<status status="PASS" start="2024-07-05T23:23:57.051016" elapsed="0.035500"/>
+</test>
+<status status="PASS" start="2024-07-05T23:23:56.987343" elapsed="0.099490"/>
+</suite>
+<statistics>
+<total>
+<stat pass="2" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="2" fail="0" skip="0" id="s1" name="01.Get Todo">01.Get Todo</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
