@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"errors"
 	"go-todo/domain"
-	"go-todo/mock/service"
+	service "go-todo/service/mocks"
+
+	// "go-todo/mock/service"
 	"io"
 	"net/http"
 	"net/http/httptest"
