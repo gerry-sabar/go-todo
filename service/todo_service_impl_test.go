@@ -4,7 +4,7 @@ import (
 	"errors"
 	domain "go-todo/domain"
 
-	domainTest "go-todo/mock/domain"
+	domainTest "go-todo/domain/mocks"
 	"testing"
 	"time"
 
@@ -202,7 +202,6 @@ func TestDeleteFail(t *testing.T) {
 }
 */
 
-// Tabel driven test case example
 func TestTodoGetAll(t *testing.T) {
 	currentTime := time.Now()
 	tests := []struct {
@@ -242,6 +241,135 @@ func TestTodoGetAll(t *testing.T) {
 			}
 			result, err := service.GetAll()
 			assert.Equal(t, tt.todos, result)
+			if tt.err != nil {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestTodoCreate(t *testing.T) {
+	tests := []struct {
+		name string
+		todo domain.Todo
+		err  error
+	}{
+		{
+			"success case",
+			domain.Todo{
+				Id:     1,
+				Title:  "first todo",
+				Status: "Doing",
+			},
+			nil,
+		},
+		{"failed case", domain.Todo{}, errors.New("failed")},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			todo := domain.Todo{
+				Id:     1,
+				Title:  "first todo",
+				Status: "Doing",
+			}
+
+			mocking := domainTest.NewTodoRepository(t)
+			mocking.On("Create", todo).Return(int64(1), tt.err)
+			service := &TodoServiceImpl{
+				TodoRepository: mocking,
+			}
+
+			result, err := service.Create(todo)
+			assert.Equal(t, tt.todo, result)
+			if tt.err != nil {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestTodoUpdate(t *testing.T) {
+	tests := []struct {
+		name string
+		id   int64
+		todo domain.Todo
+		err  error
+	}{
+		{
+			"success case",
+			1,
+			domain.Todo{
+				Id:     1,
+				Title:  "first todo",
+				Status: "Doing",
+			},
+			nil,
+		},
+		{"failed case", 1, domain.Todo{}, errors.New("failed")},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			todo := domain.Todo{
+				Title:  "first todo",
+				Status: "Doing",
+			}
+
+			mocking := domainTest.NewTodoRepository(t)
+			mocking.On("GetById", 1).Return(todo, tt.err)
+			if tt.name == "success case" {
+				mocking.On("Update", 1, todo).Return(tt.err)
+			}
+			service := &TodoServiceImpl{
+				TodoRepository: mocking,
+			}
+
+			err := service.Update(1, todo)
+			if tt.err != nil {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestTodoDelete(t *testing.T) {
+	tests := []struct {
+		name string
+		id   int64
+		err  error
+	}{
+		{
+			"success case",
+			1,
+			nil,
+		},
+		{"failed case", 1, errors.New("failed")},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			todo := domain.Todo{
+				Title:  "first todo",
+				Status: "Doing",
+			}
+
+			mocking := domainTest.NewTodoRepository(t)
+			mocking.On("GetById", 1).Return(todo, tt.err)
+			if tt.name == "success case" {
+				mocking.On("Delete", 1).Return(tt.err)
+			}
+			service := &TodoServiceImpl{
+				TodoRepository: mocking,
+			}
+
+			err := service.Delete(1)
 			if tt.err != nil {
 				assert.Error(t, err)
 			} else {

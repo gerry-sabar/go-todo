@@ -87,7 +87,12 @@ func (h *TodoHandler) GetById() gin.HandlerFunc {
 
 func (h *TodoHandler) GetAll() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		items, _ := h.TodoService.GetAll()
+		items, err := h.TodoService.GetAll()
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
 		c.JSON(http.StatusOK, gin.H{"data": items})
 	}
 }
